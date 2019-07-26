@@ -35,8 +35,12 @@ const GeometryUtils = {
       const verticalPoint = this.getPointBetweenPointsByX(thisVertex, nextVertex, point[0])
       if (verticalPoint !== null) verticalPointsY.push(verticalPoint[1])
     }
-    return this.isBetween(...horizontalPointsX, point[0]) &&
-           this.isBetween(...verticalPointsY, point[1])
+    if (horizontalPointsX.length === 2 && verticalPointsY.length === 2) {
+      return this.isBetween(...horizontalPointsX, point[0]) &&
+             this.isBetween(...verticalPointsY, point[1])
+    } else {
+      return false
+    }
   }
 }
 
