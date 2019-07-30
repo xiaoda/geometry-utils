@@ -11,7 +11,8 @@ const GeometryUtils = {
       if (x >= limit) smallerCount++
       if (x <= limit) biggerCount++
     })
-    return !!smallerCount && !!biggerCount && smallerCount !== biggerCount
+    return !!smallerCount && !!biggerCount &&
+           (smallerCount % 2 !== 0 || biggerCount % 2 !== 0)
   },
 
   /* Basic */
