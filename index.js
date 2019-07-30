@@ -1,7 +1,20 @@
 const GeometryUtils = {
+
+  /* Common */
   isBetween (limitA, limitB, x) {
     return (x - limitA) * (x - limitB) <= 0
   },
+  isBetweenByOdd (limits, x) {
+    let smallerCount = 0
+    let biggerCount = 0
+    limits.forEach(limit => {
+      if (x >= limit) smallerCount++
+      if (x <= limit) biggerCount++
+    })
+    return !!smallerCount && !!biggerCount && smallerCount !== biggerCount
+  },
+
+  /* Basic */
   getPointBetweenPointsByX (pointA, pointB, x) {
     if ((x - pointA[0]) * (x - pointB[0]) > 0) {
       return null
@@ -24,23 +37,21 @@ const GeometryUtils = {
       return [x, y]
     }
   },
-  isPointInConvexPolygon (vertices, point) {
+
+  /* Judge Point being In Polygon (By Intersection Point) */
+  isPointInPolygon (vertices, point) {
     const horizontalPointsX = []
     const verticalPointsY = []
     for (let i = 0; i < vertices.length; i++) {
       const thisVertex = vertices[i]
-      let nextVertex = i === vertices.length - 1 ? vertices[0] : vertices[i + 1]
+      const nextVertex = i === vertices.length - 1 ? vertices[0] : vertices[i + 1]
       const horizontalPoint = this.getPointBetweenPointsByY(thisVertex, nextVertex, point[1])
-      if (horizontalPoint !== null) horizontalPointsX.push(horizontalPoint[0])
+      if (horizontalPoint) horizontalPointsX.push(horizontalPoint[0])
       const verticalPoint = this.getPointBetweenPointsByX(thisVertex, nextVertex, point[0])
-      if (verticalPoint !== null) verticalPointsY.push(verticalPoint[1])
+      if (verticalPoint) verticalPointsY.push(verticalPoint[1])
     }
-    if (horizontalPointsX.length === 2 && verticalPointsY.length === 2) {
-      return this.isBetween(...horizontalPointsX, point[0]) &&
-             this.isBetween(...verticalPointsY, point[1])
-    } else {
-      return false
-    }
+    return this.isBetweenByOdd(horizontalPointsX, point[0]) &&
+           this.isBetweenByOdd(verticalPointsY, point[1])
   }
 }
 
