@@ -11,4 +11,13 @@ const result1 = utils.isPointInPolygonByIntersection(
   [0, 0]
 )
 const result2 = utils.getRadian([1, 0], [0, 0], [-1, -1])
-console.log(result2)
+const result3 = utils.isPointInPolygonByAngle(
+  [
+    [1, 1],
+    [1, 5],
+    [5, 5],
+    [5, 1]
+  ],
+  [1, 1]
+)
+console.log(result3)

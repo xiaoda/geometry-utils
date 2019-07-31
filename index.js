@@ -1,6 +1,11 @@
 const GeometryUtils = {
 
   /* Common */
+  includes (array, item) {
+    return array.some(arrayItem => {
+      return JSON.stringify(arrayItem) === JSON.stringify(item)
+    })
+  },
   isBetween (limitA, limitB, x) {
     return (x - limitA) * (x - limitB) <= 0
   },
@@ -19,7 +24,7 @@ const GeometryUtils = {
   getDistanceBetweenPoints (pointA, pointB) {
     return ((pointA[0] - pointB[0]) ** 2 + (pointA[1] - pointB[1]) ** 2) ** 0.5
   },
-  getRadian (pointA, vertex, pointB) {
+  getRadian (vertex, pointA, pointB) {
     const checkYPositive = vector => {
       let reversed = 0
       if (vector[1] < 0) {
@@ -83,10 +88,14 @@ const GeometryUtils = {
 
   /* Judge point being in polygon (By angle) */
   isPointInPolygonByAngle (vertices, point) {
+    if (this.includes(vertices, point)) return true
+    let totalRadian = 0
     for (let i = 0; i < vertices.length; i++) {
       const thisVertex = vertices[i]
       const nextVertex = i === vertices.length - 1 ? vertices[0] : vertices[i + 1]
+      totalRadian += this.getRadian(point, thisVertex, nextVertex)
     }
+    return Math.abs(totalRadian) === Math.PI * 2
   }
 }
 
