@@ -86,8 +86,8 @@ const GeometryUtils = {
            this.isBetweenByOdd(verticalPointsY, point[1])
   },
 
-  /* Judge point being in polygon (By angle) */
-  isPointInPolygonByAngle (vertices, point) {
+  /* Judge point being in polygon (By radian) */
+  isPointInPolygonByRadian (vertices, point) {
     if (this.includes(vertices, point)) return true
     let totalRadian = 0
     for (let i = 0; i < vertices.length; i++) {
