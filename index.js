@@ -16,6 +16,32 @@ const GeometryUtils = {
   },
 
   /* Basic */
+  getDistanceBetweenPoints (pointA, pointB) {
+    return ((pointA[0] - pointB[0]) ** 2 + (pointA[1] - pointB[1]) ** 2) ** 0.5
+  },
+  getRadian (pointA, vertex, pointB) {
+    const checkYPositive = vector => {
+      let reversed = 0
+      if (vector[1] < 0) {
+        reversed = 1
+        vector = vector.map(x => x * -1)
+      }
+      return [vector, reversed]
+    }
+    const [vectorAX, vectorAXReversed] = checkYPositive(
+      [pointA[0] - vertex[0], pointA[1] - vertex[1]]
+    )
+    const radianAX = Math.atan2(vectorAX[1], vectorAX[0]) + Math.PI * vectorAXReversed
+    const [vectorBX, vectorBXReversed] = checkYPositive(
+      [pointB[0] - vertex[0], pointB[1] - vertex[1]]
+    )
+    const radianBX = Math.atan2(vectorBX[1], vectorBX[0]) + Math.PI * vectorBXReversed
+    let radian = radianBX - radianAX
+    if (Math.abs(radian) > Math.PI) {
+      radian += Math.PI * 2 * (radian / Math.abs(radian)) * -1
+    }
+    return radian
+  },
   getPointBetweenPointsByX (pointA, pointB, x) {
     if ((x - pointA[0]) * (x - pointB[0]) > 0) {
       return null
@@ -39,8 +65,8 @@ const GeometryUtils = {
     }
   },
 
-  /* Judge Point being In Polygon (By Intersection Point) */
-  isPointInPolygon (vertices, point) {
+  /* Judge point being in polygon (By intersection) */
+  isPointInPolygonByIntersection (vertices, point) {
     const horizontalPointsX = []
     const verticalPointsY = []
     for (let i = 0; i < vertices.length; i++) {
@@ -53,6 +79,14 @@ const GeometryUtils = {
     }
     return this.isBetweenByOdd(horizontalPointsX, point[0]) &&
            this.isBetweenByOdd(verticalPointsY, point[1])
+  },
+
+  /* Judge point being in polygon (By angle) */
+  isPointInPolygonByAngle (vertices, point) {
+    for (let i = 0; i < vertices.length; i++) {
+      const thisVertex = vertices[i]
+      const nextVertex = i === vertices.length - 1 ? vertices[0] : vertices[i + 1]
+    }
   }
 }
 

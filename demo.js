@@ -1,5 +1,14 @@
 #!/usr/bin/env node
 
 const utils = require('./index')
-const demo = utils.isPointInPolygon([[10, 20], [20, 90], [90, 80], [80, 10]], [0, 0])
-console.log(demo)
+const result1 = utils.isPointInPolygonByIntersection(
+  [
+    [10, 20],
+    [20, 90],
+    [90, 80],
+    [80, 10]
+  ],
+  [0, 0]
+)
+const result2 = utils.getRadian([1, 0], [0, 0], [-1, -1])
+console.log(result2)
