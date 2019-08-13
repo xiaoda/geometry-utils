@@ -34,6 +34,28 @@ const GeometryUtils = {
   getDistanceBetweenPoints (pointA, pointB) {
     return ((pointA[0] - pointB[0]) ** 2 + (pointA[1] - pointB[1]) ** 2) ** .5
   },
+  getPointBetweenPointsByX (pointA, pointB, x) {
+    if (!this.isBetween(pointA[0], pointB[0], x)) {
+      return null
+    } else if (pointA[0] == pointB[0]) {
+      return null
+    } else {
+      const ratio = (x - pointA[0]) / (pointB[0] - pointA[0])
+      const y = pointA[1] + (pointB[1] - pointA[1]) * ratio
+      return [x, y]
+    }
+  },
+  getPointBetweenPointsByY (pointA, pointB, y) {
+    if (!this.isBetween(pointA[1], pointB[1], y)) {
+      return null
+    } else if (pointA[1] == pointB[1]) {
+      return null
+    } else {
+      const ratio = (y - pointA[1]) / (pointB[1] - pointA[1])
+      const x = pointA[0] + (pointB[0] - pointA[0]) * ratio
+      return [x, y]
+    }
+  },
   getRadian (vertex, pointA, pointB) {
     const checkYPositive = vector => {
       let reversed = 0
@@ -65,28 +87,6 @@ const GeometryUtils = {
     }
     distPoint[1] = distPoint[0] * Math.tan(distRadian)
     return distPoint
-  },
-  getPointBetweenPointsByX (pointA, pointB, x) {
-    if (!this.isBetween(pointA[0], pointB[0], x)) {
-      return null
-    } else if (pointA[0] == pointB[0]) {
-      return null
-    } else {
-      const ratio = (x - pointA[0]) / (pointB[0] - pointA[0])
-      const y = pointA[1] + (pointB[1] - pointA[1]) * ratio
-      return [x, y]
-    }
-  },
-  getPointBetweenPointsByY (pointA, pointB, y) {
-    if (!this.isBetween(pointA[1], pointB[1], y)) {
-      return null
-    } else if (pointA[1] == pointB[1]) {
-      return null
-    } else {
-      const ratio = (y - pointA[1]) / (pointB[1] - pointA[1])
-      const x = pointA[0] + (pointB[0] - pointA[0]) * ratio
-      return [x, y]
-    }
   },
 
   /**
