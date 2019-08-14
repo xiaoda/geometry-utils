@@ -2,6 +2,6 @@
 
 const utils = require('./index')
 const demo = utils.getPointDistanceFromPolygon(
-  [[0, 0], [0, 5], [5, 5], [5, 0]], [1, 2]
+  [[2, 5], [5, 8], [8, 5], [5, 2]], [4, 1]
 )
 console.log(demo)

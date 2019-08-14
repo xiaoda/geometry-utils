@@ -85,7 +85,10 @@ const GeometryUtils = {
     if (distRadian > Math.PI / 2 || distRadian < Math.PI / 2 * -1) {
       distPoint[0] *= -1
     }
-    distPoint[1] = distPoint[0] * Math.tan(distRadian)
+    distPoint[1] =
+      Math.abs(distRadian) === Math.PI / 2 ?
+      distance * (distRadian / Math.abs(distRadian)) :
+      distPoint[0] * Math.tan(distRadian)
     return distPoint
   },
 
