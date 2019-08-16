@@ -1,7 +1,5 @@
 #!/usr/bin/env node
 
 const utils = require('./index')
-const demo = utils.getPointDistanceFromPolygon(
-  [[2, 5], [5, 8], [8, 5], [5, 2]], [4, 1]
-)
+const demo = utils.isPointInCircle([5, 5], 5, [2, 2])
 console.log(demo)

@@ -160,6 +160,14 @@ const GeometryUtils = {
       distances.push(distance)
     }
     return Math.min(...distances)
+  },
+
+  /**
+   * Judge point being in circle
+   */
+  isPointInCircle (center, radius, point) {
+    const distance = this.getDistanceBetweenPoints(center, point)
+    return distance <= radius
   }
 }
 
