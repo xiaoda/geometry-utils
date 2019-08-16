@@ -169,6 +169,14 @@ const GeometryUtils = {
     const distance = this.getDistanceBetweenPoints(center, point)
     return distance <= radius
   }
+
+  /**
+   * Get distance whether a point is in circle or not
+   */
+  getPointDistanceFromCircle (center, radius, point) {
+    const distance = this.getDistanceBetweenPoints(center, point)
+    return Math.abs(distance - radius)
+  }
 }
 
 try {
