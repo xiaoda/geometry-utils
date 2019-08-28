@@ -34,18 +34,10 @@ const GeometryUtils = {
   getDistanceBetweenPoints (pointA, pointB) {
     return ((pointA[0] - pointB[0]) ** 2 + (pointA[1] - pointB[1]) ** 2) ** .5
   },
-  getMidPointBetweenPoints (pointA, pointB, ratio = .5) {
+  getPointBetweenPoints (pointA, pointB, ratio = .5) {
     return [
       pointA[0] * (1 - ratio) + pointB[0] * ratio,
       pointA[1] * (1 - ratio) + pointB[1] * ratio
-    ]
-  },
-  getPointByPointVectorDistance (point, vector, distance) {
-    if (distance < 0) vector = [vector[0] * -1, vector[1] * -1]
-    const x = (distance ** 2 / (vector[0] ** 2 + vector[1] ** 2)) ** .5
-    return [
-      point[0] + vector[0] * x,
-      point[1] + vector[1] * x
     ]
   },
   getPointBetweenPointsByX (pointA, pointB, x) {
@@ -70,8 +62,16 @@ const GeometryUtils = {
       return [x, y]
     }
   },
+  getPointByPointVectorDistance (point, vector, distance) {
+    if (distance < 0) vector = [vector[0] * -1, vector[1] * -1]
+    const x = (distance ** 2 / (vector[0] ** 2 + vector[1] ** 2)) ** .5
+    return [
+      point[0] + vector[0] * x,
+      point[1] + vector[1] * x
+    ]
+  },
   getCurvePointBetweenPoints (pointA, pointB, curvature) {
-    const midPoint = this.getMidPointBetweenPoints(pointA, pointB)
+    const midPoint = this.getPointBetweenPoints(pointA, pointB)
     const vector = this.getVector(pointA, pointB)
     const verticalVector = this.getVerticalVector(vector)
     const distance = this.getDistanceBetweenPoints(pointA, pointB)

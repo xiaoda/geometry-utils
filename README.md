@@ -18,11 +18,29 @@ isBetween 的拓展方法，判断数字 x 是否奇数次位于多个界限内�
 ### getDistanceBetweenPoints
 获取两点间距离。
 
+### getPointBetweenPoints
+按比例获取两点间的点。
+
 ### getPointBetweenPointsByX
 在两点连成的线段中获取特定 x 坐标的点，不存在则返回 null。
 
 ### getPointBetweenPointsByY
 在两点连成的线段中获取特定 y 坐标的点，不存在则返回 null。
+
+### getPointByPointVectorDistance
+依据点、向量、距离获取新的点。
+
+### getCurvePointBetweenPoints
+获取两点间曲线的中点。
+
+### getVector
+生成向量。
+
+### getVerticalVector
+获取垂直的向量。
+
+### getQuadrant
+获取点或向量存在的象限。
 
 ### getRadian
 获取三个点构成的角的弧度。
@@ -39,3 +57,9 @@ isBetween 的拓展方法，判断数字 x 是否奇数次位于多个界限内�
 
 ### getPointDistanceFromPolygon
 获取点到多边形的最近距离。在依次获取点到多边形各边界的距离时，为方便计算，将边界的两个顶点移动至原点和 x 轴上，同时将该点相应地移动至新的点坐标。这样移动后，新点的 y 坐标或到顶点的距离就是点到边界的距离。
+
+### isPointInCircle
+判断点是否位于圆内，判断依据是点到圆心的距离。
+
+### getPointDistanceFromCircle
+获取点到圆的距离。
