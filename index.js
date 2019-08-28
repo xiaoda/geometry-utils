@@ -34,6 +34,20 @@ const GeometryUtils = {
   getDistanceBetweenPoints (pointA, pointB) {
     return ((pointA[0] - pointB[0]) ** 2 + (pointA[1] - pointB[1]) ** 2) ** .5
   },
+  getMidPointBetweenPoints (pointA, pointB, ratio = .5) {
+    return [
+      pointA[0] * (1 - ratio) + pointB[0] * ratio,
+      pointA[1] * (1 - ratio) + pointB[1] * ratio
+    ]
+  },
+  getPointByPointVectorDistance (point, vector, distance) {
+    if (distance < 0) vector = [vector[0] * -1, vector[1] * -1]
+    const x = (distance ** 2 / (vector[0] ** 2 + vector[1] ** 2)) ** .5
+    return [
+      point[0] + vector[0] * x,
+      point[1] + vector[1] * x
+    ]
+  },
   getPointBetweenPointsByX (pointA, pointB, x) {
     if (!this.isBetween(pointA[0], pointB[0], x)) {
       return null
@@ -55,6 +69,56 @@ const GeometryUtils = {
       const x = pointA[0] + (pointB[0] - pointA[0]) * ratio
       return [x, y]
     }
+  },
+  getCurvePointBetweenPoints (pointA, pointB, curvature) {
+    const midPoint = this.getMidPointBetweenPoints(pointA, pointB)
+    const vector = this.getVector(pointA, pointB)
+    const verticalVector = this.getVerticalVector(vector)
+    const distance = this.getDistanceBetweenPoints(pointA, pointB)
+    const curveDistance = distance / 2 * curvature
+    return this.getPointByPointVectorDistance(midPoint, verticalVector, curveDistance)
+  },
+  getVector (pointA, pointB) {
+    return [pointB[0] - pointA[0], pointB[1] - pointA[1]]
+  },
+  getVerticalVector (vector, clockwise = 1) {
+    const quadrant = this.getQuadrant(vector)
+    const verticalVector = [Math.abs(vector[1]), Math.abs(vector[0])]
+    let verticalVectorQuadrant = quadrant + (clockwise ? -1 : 1)
+    switch (verticalVectorQuadrant) {
+      case 0:
+      case 4:
+        break
+      case 1:
+        verticalVector[0] *= -1
+        break
+      case 2:
+        verticalVector[0] *= -1
+        verticalVector[1] *= -1
+        break
+      case -1:
+      case 3:
+        verticalVector[1] *= -1
+        break
+    }
+    return verticalVector
+  },
+  getQuadrant (pointOrVector) {
+    let quadrant
+    if (pointOrVector[0] > 0) {
+      if (pointOrVector[1] > 0) {
+        quadrant = 0
+      } else {
+        quadrant = 3
+      }
+    } else {
+      if (pointOrVector[1] > 0) {
+        quadrant = 1
+      } else {
+        quadrant = 2
+      }
+    }
+    return quadrant
   },
   getRadian (vertex, pointA, pointB) {
     const checkYPositive = vector => {
@@ -168,7 +232,12 @@ const GeometryUtils = {
   isPointInCircle (center, radius, point) {
     const distance = this.getDistanceBetweenPoints(center, point)
     return distance <= radius
-  }
+  },
+
+  /**
+   * Judge point being on arc
+   */
+  isPointOnArc (center, radius,) {},
 
   /**
    * Get distance whether a point is in circle or not
