@@ -34,7 +34,7 @@ const GeometryUtils = {
   getDistanceBetweenPoints (pointA, pointB) {
     return ((pointA[0] - pointB[0]) ** 2 + (pointA[1] - pointB[1]) ** 2) ** .5
   },
-  getPointBetweenPoints (pointA, pointB, ratio = .5) {
+  getMidPointBetweenPoints (pointA, pointB, ratio = .5) {
     return [
       pointA[0] * (1 - ratio) + pointB[0] * ratio,
       pointA[1] * (1 - ratio) + pointB[1] * ratio
@@ -71,7 +71,7 @@ const GeometryUtils = {
     ]
   },
   getCurvePointBetweenPoints (pointA, pointB, curvature) {
-    const midPoint = this.getPointBetweenPoints(pointA, pointB)
+    const midPoint = this.getMidPointBetweenPoints(pointA, pointB)
     const vector = this.getVector(pointA, pointB)
     const verticalVector = this.getVerticalVector(vector)
     const distance = this.getDistanceBetweenPoints(pointA, pointB)
@@ -86,18 +86,18 @@ const GeometryUtils = {
     const verticalVector = [Math.abs(vector[1]), Math.abs(vector[0])]
     let verticalVectorQuadrant = quadrant + (clockwise ? -1 : 1)
     switch (verticalVectorQuadrant) {
-      case 0:
+      case 0: // 1st quadrant
       case 4:
         break
-      case 1:
+      case 1: // 2nd quadrant
         verticalVector[0] *= -1
         break
-      case 2:
+      case 2: // 3rd quadrant
         verticalVector[0] *= -1
         verticalVector[1] *= -1
         break
+      case 3: // 4th quadrant
       case -1:
-      case 3:
         verticalVector[1] *= -1
         break
     }
@@ -107,15 +107,15 @@ const GeometryUtils = {
     let quadrant
     if (pointOrVector[0] > 0) {
       if (pointOrVector[1] > 0) {
-        quadrant = 0
+        quadrant = 0 // 1st quadrant
       } else {
-        quadrant = 3
+        quadrant = 3 // 4th quadrant
       }
     } else {
       if (pointOrVector[1] > 0) {
-        quadrant = 1
+        quadrant = 1 // 2nd quadrant
       } else {
-        quadrant = 2
+        quadrant = 2 // 3rd quadrant
       }
     }
     return quadrant
