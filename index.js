@@ -75,7 +75,7 @@ const GeometryUtils = {
     const vector = this.getVector(pointA, pointB)
     const verticalVector = this.getVerticalVector(vector)
     const distance = this.getDistanceBetweenPoints(pointA, pointB)
-    const curveDistance = distance / 2 * curvature
+    const curveDistance = distance * .5 * curvature
     return this.getPointByPointVectorDistance(midPoint, verticalVector, curveDistance)
   },
   getVector (pointA, pointB) {
@@ -146,11 +146,11 @@ const GeometryUtils = {
     const distRadian = this.formatRadian(pointRadian + radian)
     const distPoint = []
     distPoint[0] = (distance ** 2 / (1 + Math.tan(distRadian) ** 2)) ** .5
-    if (distRadian > Math.PI / 2 || distRadian < Math.PI / 2 * -1) {
+    if (distRadian > Math.PI * .5 || distRadian < Math.PI * .5 * -1) {
       distPoint[0] *= -1
     }
     distPoint[1] =
-      Math.abs(distRadian) === Math.PI / 2 ?
+      Math.abs(distRadian) === Math.PI * .5 ?
       distance * (distRadian / Math.abs(distRadian)) :
       distPoint[0] * Math.tan(distRadian)
     return distPoint
