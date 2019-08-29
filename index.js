@@ -235,11 +235,6 @@ const GeometryUtils = {
   },
 
   /**
-   * Judge point being on arc
-   */
-  isPointOnArc (center, radius,) {},
-
-  /**
    * Get distance whether a point is in circle or not
    */
   getPointDistanceFromCircle (center, radius, point) {
