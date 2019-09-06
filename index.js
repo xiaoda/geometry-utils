@@ -70,6 +70,10 @@ const GeometryUtils = {
       point[1] + vector[1] * x
     ]
   },
+  getPointByPointRadianDistance (point, radian, distance) {
+    const vector = [1, Math.tan(radian)]
+    return this.getPointByPointVectorDistance(point, vector, distance)
+  },
   getCurvePointBetweenPoints (pointA, pointB, curvature) {
     const midPoint = this.getMidPointBetweenPoints(pointA, pointB)
     const vector = this.getVector(pointA, pointB)
