@@ -96,8 +96,8 @@ const GeometryUtils = {
         verticalVector[0] *= -1
         verticalVector[1] *= -1
         break
-      case 3: // 4th quadrant
       case -1:
+      case 3: // 4th quadrant
         verticalVector[1] *= -1
         break
     }
@@ -140,9 +140,12 @@ const GeometryUtils = {
     const radian = this.formatRadian(radianBX - radianAX)
     return radian
   },
+  getRadianFromXAxis (point) {
+    return this.getRadian([0, 0], [1, 0], point)
+  },
   transformPointByRadian (point, radian) {
     const distance = this.getDistanceBetweenPoints(point, [0, 0])
-    const pointRadian = this.getRadian([0, 0], [1, 0], point)
+    const pointRadian = this.getRadianFromXAxis(point)
     const distRadian = this.formatRadian(pointRadian + radian)
     const distPoint = []
     distPoint[0] = (distance ** 2 / (1 + Math.tan(distRadian) ** 2)) ** .5
