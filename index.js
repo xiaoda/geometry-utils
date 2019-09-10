@@ -77,7 +77,10 @@ const GeometryUtils = {
     ]
   },
   getPointByPointRadianDistance (point, radian, distance) {
-    const vector = [1, Math.tan(radian)]
+    const vector =
+      Math.abs(radian) === Math.PI / 2 ?
+      [0, radian / Math.abs(radian)] :
+      [1, Math.tan(radian)]
     return this.getPointByPointVectorDistance(point, vector, distance)
   },
   getCurvePointBetweenPoints (pointA, pointB, curvature) {
