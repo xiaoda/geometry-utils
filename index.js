@@ -34,6 +34,12 @@ const GeometryUtils = {
   getDistanceBetweenPoints (pointA, pointB) {
     return ((pointA[0] - pointB[0]) ** 2 + (pointA[1] - pointB[1]) ** 2) ** .5
   },
+  getPointByOffset (point, offset = {}) {
+    return [
+      point[0] + (offset.x || 0),
+      point[1] + (offset.y || 0)
+    ]
+  },
   getMidPointBetweenPoints (pointA, pointB, ratio = .5) {
     return [
       pointA[0] * (1 - ratio) + pointB[0] * ratio,
@@ -204,14 +210,8 @@ const GeometryUtils = {
     for (let i = 0; i < vertices.length; i++) {
       const thisVertex = vertices[i]
       const nextVertex = i === vertices.length - 1 ? vertices[0] : vertices[i + 1]
-      const translatedNextVertex = [
-        nextVertex[0] - thisVertex[0],
-        nextVertex[1] - thisVertex[1]
-      ]
-      const translatedPoint = [
-        point[0] - thisVertex[0],
-        point[1] - thisVertex[1]
-      ]
+      const translatedNextVertex = this.getVector(thisVertex, nextVertex)
+      const translatedPoint = this.getVector(thisVertex, point)
       const transformedNextVertex = [
         this.getDistanceBetweenPoints(translatedNextVertex, [0, 0]), 0
       ]
