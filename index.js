@@ -77,10 +77,24 @@ const GeometryUtils = {
     ]
   },
   getPointByPointRadianDistance (point, radian, distance) {
-    const vector =
-      Math.abs(radian) === Math.PI / 2 ?
-      [0, radian / Math.abs(radian)] :
-      [1, Math.tan(radian)]
+    radian = this.formatRadian(radian)
+    let vector = []
+    if (Math.abs(radian) === Math.PI / 2) {
+      vector = [0, radian / Math.abs(radian)]
+    } else {
+      const quadrant = this.getQuadrantFromRadian(radian)
+      switch (quadrant) {
+        case 0:
+        case 3:
+          vector[0] = 1
+          break
+        case 1:
+        case 2:
+          vector[0] = -1
+          break
+      }
+      vector[1] = vector[0] * Math.tan(radian)
+    }
     return this.getPointByPointVectorDistance(point, vector, distance)
   },
   getCurvePointBetweenPoints (pointA, pointB, curvature) {
@@ -127,6 +141,24 @@ const GeometryUtils = {
     } else {
       if (pointOrVector[1] > 0) {
         quadrant = 1 // 2nd quadrant
+      } else {
+        quadrant = 2 // 3rd quadrant
+      }
+    }
+    return quadrant
+  },
+  getQuadrantFromRadian (radian) {
+    radian = this.formatRadian(radian)
+    let quadrant
+    if (radian > 0) {
+      if (radian < Math.PI * .5) {
+        quadrant = 0 // 1st quadrant
+      } else {
+        quadrant = 1 // 2nd quadrant
+      }
+    } else {
+      if (radian > Math.PI * .5 * -1) {
+        quadrant = 3 // 4th quadrant
       } else {
         quadrant = 2 // 3rd quadrant
       }
