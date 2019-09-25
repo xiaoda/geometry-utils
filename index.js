@@ -3,9 +3,6 @@ const GeometryUtils = {
   /**
    * Common
    */
-  mix (a, b, ratio) {
-    return a * (1 - ratio) + b * ratio
-  },
   includes (array, item) {
     return array.some(arrayItem => {
       return JSON.stringify(arrayItem) === JSON.stringify(item)
@@ -23,6 +20,12 @@ const GeometryUtils = {
     })
     return !!smallerCount && !!biggerCount &&
            (smallerCount % 2 === 1 || biggerCount % 2 === 1)
+  },
+  mix (a, b, ratio) {
+    return a * (1 - ratio) + b * ratio
+  },
+  clamp (min, max, x) {
+    return min(max(x, min), max)
   },
   formatRadian (radian) {
     while (Math.abs(radian) > Math.PI) {
