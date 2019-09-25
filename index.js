@@ -3,6 +3,9 @@ const GeometryUtils = {
   /**
    * Common
    */
+  mix (a, b, ratio) {
+    return a * (1 - ratio) + b * ratio
+  },
   includes (array, item) {
     return array.some(arrayItem => {
       return JSON.stringify(arrayItem) === JSON.stringify(item)
@@ -42,8 +45,8 @@ const GeometryUtils = {
   },
   getMidPointBetweenPoints (pointA, pointB, ratio = .5) {
     return [
-      pointA[0] * (1 - ratio) + pointB[0] * ratio,
-      pointA[1] * (1 - ratio) + pointB[1] * ratio
+      this.mix(pointA[0], pointB[0], ratio),
+      this.mix(pointA[1], pointB[1], ratio)
     ]
   },
   getPointBetweenPointsByX (pointA, pointB, x) {
