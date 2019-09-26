@@ -25,7 +25,7 @@ const GeometryUtils = {
     return a * (1 - ratio) + b * ratio
   },
   clamp (min, max, x) {
-    return min(max(x, min), max)
+    return Math.min(Math.max(x, min), max)
   },
   formatRadian (radian) {
     while (Math.abs(radian) > Math.PI) {
