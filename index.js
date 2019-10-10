@@ -300,6 +300,4 @@ const GeometryUtils = {
   }
 }
 
-try {
-  module.exports = GeometryUtils
-} catch (e) {}
+if (module) module.exports = GeometryUtils
