@@ -42,6 +42,35 @@ const GeometryUtils = {
     }
     return radian
   },
+  debounce (func, interval) {
+    let timeoutHandler
+    return function () {
+      const _this = this
+      const _args = arguments
+      clearTimeout(timeoutHandler)
+      timeoutHandler = setTimeout(function () {
+        func.apply(_this, _args)
+      }, interval)
+    }
+  },
+  throttle (func, interval) {
+    let lastTime, timeoutHandler
+    return function (args) {
+      const _this = this
+      const _args = arguments
+      let now = +new Date()
+      if (lastTime && now < lastTime + interval) {
+        clearTimeout(timeoutHandler)
+        timeoutHandler = setTimeout(function () {
+          lastTime = now
+          func.apply(_this, _args)
+        }, interval)
+      }else {
+        lastTime = now
+        func.apply(_this,_args)
+      }
+    }
+  },
 
   /**
    * Basic
@@ -300,4 +329,4 @@ const GeometryUtils = {
   }
 }
 
-if (module) module.exports = GeometryUtils
+if (typeof module !== 'undefined') module.exports = GeometryUtils
