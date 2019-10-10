@@ -33,6 +33,9 @@ const GeometryUtils = {
   mix (a, b, ratio) {
     return a * (1 - ratio) + b * ratio
   },
+  map (a, b, x) {
+    return x / a * b
+  },
   formatRadian (radian) {
     while (Math.abs(radian) > Math.PI) {
       radian += Math.PI * 2 * (radian / Math.abs(radian)) * -1
