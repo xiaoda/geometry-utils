@@ -42,18 +42,18 @@ const GeometryUtils = {
     }
     return radian
   },
-  debounce (func, interval) {
+  debounce (fun, interval) {
     let timeoutHandler
     return function () {
       const _this = this
       const _args = arguments
       clearTimeout(timeoutHandler)
       timeoutHandler = setTimeout(function () {
-        func.apply(_this, _args)
+        fun.apply(_this, _args)
       }, interval)
     }
   },
-  throttle (func, interval) {
+  throttle (fun, interval) {
     let lastTime, timeoutHandler
     return function (args) {
       const _this = this
@@ -63,13 +63,19 @@ const GeometryUtils = {
         clearTimeout(timeoutHandler)
         timeoutHandler = setTimeout(function () {
           lastTime = now
-          func.apply(_this, _args)
+          fun.apply(_this, _args)
         }, interval)
       }else {
         lastTime = now
-        func.apply(_this,_args)
+        fun.apply(_this,_args)
       }
     }
+  },
+  chain (data, ...funs) {
+    funs.forEach(fun => {
+      data = fun(data)
+    })
+    return data
   },
 
   /**
