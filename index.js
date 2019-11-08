@@ -71,9 +71,15 @@ const GeometryUtils = {
       }
     }
   },
-  chain (data, ...funs) {
-    funs.forEach(fun => {
-      data = fun(data)
+  chain (data, ...args) {
+    args.forEach(arg => {
+      if (Array.isArray(arg)) {
+        const [fun, ...funArgs] = arg
+        data = fun(data, ...funArgs)
+      } else {
+        const fun = arg
+        data = fun(data)
+      }
     })
     return data
   },
