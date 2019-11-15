@@ -124,78 +124,80 @@ const GeometryUtils = {
       return [x, y]
     }
   },
-  getPointByPointVectorDistance (point, vector, distance) {
-    if (distance < 0) vector = [vector[0] * -1, vector[1] * -1]
-    const x = (distance ** 2 / (vector[0] ** 2 + vector[1] ** 2)) ** .5
+  getPointByPointDirectionDistance (point, direction, distance) {
+    if (distance < 0) direction = [direction[0] * -1, direction[1] * -1]
+    const x = (distance ** 2 / (direction[0] ** 2 + direction[1] ** 2)) ** .5
     return [
-      point[0] + vector[0] * x,
-      point[1] + vector[1] * x
+      point[0] + direction[0] * x,
+      point[1] + direction[1] * x
     ]
   },
   getPointByPointRadianDistance (point, radian, distance) {
     radian = this.formatRadian(radian)
-    let vector = []
+    let direction = []
     if (Math.abs(radian) === Math.PI / 2) {
-      vector = [0, radian / Math.abs(radian)]
+      direction = [0, radian / Math.abs(radian)]
     } else {
       const quadrant = this.getQuadrantFromRadian(radian)
       switch (quadrant) {
         case 0:
         case 3:
-          vector[0] = 1
+          direction[0] = 1
           break
         case 1:
         case 2:
-          vector[0] = -1
+          direction[0] = -1
           break
       }
-      vector[1] = vector[0] * Math.tan(radian)
+      direction[1] = direction[0] * Math.tan(radian)
     }
-    return this.getPointByPointVectorDistance(point, vector, distance)
+    return this.getPointByPointDirectionDistance(point, direction, distance)
   },
   getCurvePointBetweenPoints (pointA, pointB, curvature) {
     const midPoint = this.getMidPointBetweenPoints(pointA, pointB)
-    const vector = this.getVector(pointA, pointB)
-    const verticalVector = this.getVerticalVector(vector)
+    const direction = this.getDirection(pointA, pointB)
+    const verticalDirection = this.getVerticalDirection(direction)
     const distance = this.getDistanceBetweenPoints(pointA, pointB)
     const curveDistance = distance * .5 * curvature
-    return this.getPointByPointVectorDistance(midPoint, verticalVector, curveDistance)
+    return this.getPointByPointDirectionDistance(
+      midPoint, verticalDirection, curveDistance
+    )
   },
-  getVector (pointA, pointB) {
+  getDirection (pointA, pointB) {
     return [pointB[0] - pointA[0], pointB[1] - pointA[1]]
   },
-  getVerticalVector (vector, clockwise = 1) {
-    const quadrant = this.getQuadrant(vector)
-    const verticalVector = [Math.abs(vector[1]), Math.abs(vector[0])]
-    let verticalVectorQuadrant = quadrant + (clockwise ? -1 : 1)
-    switch (verticalVectorQuadrant) {
+  getVerticalDirection (direction, clockwise = 1) {
+    const quadrant = this.getQuadrant(direction)
+    const verticalDirection = [Math.abs(direction[1]), Math.abs(direction[0])]
+    let verticalDirectionQuadrant = quadrant + (clockwise ? -1 : 1)
+    switch (verticalDirectionQuadrant) {
       case 0: // 1st quadrant
       case 4:
         break
       case 1: // 2nd quadrant
-        verticalVector[0] *= -1
+        verticalDirection[0] *= -1
         break
       case 2: // 3rd quadrant
-        verticalVector[0] *= -1
-        verticalVector[1] *= -1
+        verticalDirection[0] *= -1
+        verticalDirection[1] *= -1
         break
       case -1:
       case 3: // 4th quadrant
-        verticalVector[1] *= -1
+        verticalDirection[1] *= -1
         break
     }
-    return verticalVector
+    return verticalDirection
   },
-  getQuadrant (pointOrVector) {
+  getQuadrant (pointOrDirection) {
     let quadrant
-    if (pointOrVector[0] > 0) {
-      if (pointOrVector[1] > 0) {
+    if (pointOrDirection[0] > 0) {
+      if (pointOrDirection[1] > 0) {
         quadrant = 0 // 1st quadrant
       } else {
         quadrant = 3 // 4th quadrant
       }
     } else {
-      if (pointOrVector[1] > 0) {
+      if (pointOrDirection[1] > 0) {
         quadrant = 1 // 2nd quadrant
       } else {
         quadrant = 2 // 3rd quadrant
@@ -222,22 +224,22 @@ const GeometryUtils = {
     return quadrant
   },
   getRadian (vertex, pointA, pointB) {
-    const checkYPositive = vector => {
+    const checkYPositive = direction => {
       let reversed = 0
-      if (vector[1] < 0) {
+      if (direction[1] < 0) {
         reversed = 1
-        vector = vector.map(x => x * -1)
+        direction = direction.map(x => x * -1)
       }
-      return [vector, reversed]
+      return [direction, reversed]
     }
-    const [vectorAX, vectorAXReversed] = checkYPositive(
+    const [directionAX, directionAXReversed] = checkYPositive(
       [pointA[0] - vertex[0], pointA[1] - vertex[1]]
     )
-    const radianAX = Math.atan2(vectorAX[1], vectorAX[0]) + Math.PI * vectorAXReversed
-    const [vectorBX, vectorBXReversed] = checkYPositive(
+    const radianAX = Math.atan2(directionAX[1], directionAX[0]) + Math.PI * directionAXReversed
+    const [directionBX, directionBXReversed] = checkYPositive(
       [pointB[0] - vertex[0], pointB[1] - vertex[1]]
     )
-    const radianBX = Math.atan2(vectorBX[1], vectorBX[0]) + Math.PI * vectorBXReversed
+    const radianBX = Math.atan2(directionBX[1], directionBX[0]) + Math.PI * directionBXReversed
     const radian = this.formatRadian(radianBX - radianAX)
     return radian
   },
@@ -269,9 +271,13 @@ const GeometryUtils = {
     for (let i = 0; i < vertices.length; i++) {
       const thisVertex = vertices[i]
       const nextVertex = i === vertices.length - 1 ? vertices[0] : vertices[i + 1]
-      const horizontalPoint = this.getPointBetweenPointsByY(thisVertex, nextVertex, point[1])
+      const horizontalPoint = this.getPointBetweenPointsByY(
+        thisVertex, nextVertex, point[1]
+      )
       if (horizontalPoint) horizontalPointsX.push(horizontalPoint[0])
-      const verticalPoint = this.getPointBetweenPointsByX(thisVertex, nextVertex, point[0])
+      const verticalPoint = this.getPointBetweenPointsByX(
+        thisVertex, nextVertex, point[0]
+      )
       if (verticalPoint) verticalPointsY.push(verticalPoint[1])
     }
     return this.isBetweenByOdd(horizontalPointsX, point[0]) &&
@@ -301,8 +307,8 @@ const GeometryUtils = {
     for (let i = 0; i < vertices.length; i++) {
       const thisVertex = vertices[i]
       const nextVertex = i === vertices.length - 1 ? vertices[0] : vertices[i + 1]
-      const translatedNextVertex = this.getVector(thisVertex, nextVertex)
-      const translatedPoint = this.getVector(thisVertex, point)
+      const translatedNextVertex = this.getDirection(thisVertex, nextVertex)
+      const translatedPoint = this.getDirection(thisVertex, point)
       const transformedNextVertex = [
         this.getDistanceBetweenPoints(translatedNextVertex, [0, 0]), 0
       ]
