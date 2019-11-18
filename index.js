@@ -188,6 +188,9 @@ const GeometryUtils = {
     }
     return verticalDirection
   },
+  mergeVectors (...vectors) {
+    // todo
+  },
   getQuadrant (pointOrDirection) {
     let quadrant
     if (pointOrDirection[0] > 0) {
@@ -215,10 +218,10 @@ const GeometryUtils = {
         quadrant = 1 // 2nd quadrant
       }
     } else {
-      if (radian > Math.PI * .5 * -1) {
-        quadrant = 3 // 4th quadrant
-      } else {
+      if (radian < Math.PI * .5 * -1) {
         quadrant = 2 // 3rd quadrant
+      } else {
+        quadrant = 3 // 4th quadrant
       }
     }
     return quadrant
@@ -235,11 +238,17 @@ const GeometryUtils = {
     const [directionAX, directionAXReversed] = checkYPositive(
       [pointA[0] - vertex[0], pointA[1] - vertex[1]]
     )
-    const radianAX = Math.atan2(directionAX[1], directionAX[0]) + Math.PI * directionAXReversed
+    const radianAX = (
+      Math.atan2(directionAX[1], directionAX[0]) +
+      Math.PI * directionAXReversed
+    )
     const [directionBX, directionBXReversed] = checkYPositive(
       [pointB[0] - vertex[0], pointB[1] - vertex[1]]
     )
-    const radianBX = Math.atan2(directionBX[1], directionBX[0]) + Math.PI * directionBXReversed
+    const radianBX = (
+      Math.atan2(directionBX[1], directionBX[0]) +
+      Math.PI * directionBXReversed
+    )
     const radian = this.formatRadian(radianBX - radianAX)
     return radian
   },
@@ -295,8 +304,8 @@ const GeometryUtils = {
       const nextVertex = i === vertices.length - 1 ? vertices[0] : vertices[i + 1]
       totalRadian += this.getRadian(point, thisVertex, nextVertex)
     }
-    return Math.abs(totalRadian) > Math.PI * 2 - 1 &&
-           Math.abs(totalRadian) < Math.PI * 2 + 1
+    return Math.abs(totalRadian) > Math.PI * 2 - .01 &&
+           Math.abs(totalRadian) < Math.PI * 2 + .01
   },
 
   /**
@@ -312,7 +321,11 @@ const GeometryUtils = {
       const transformedNextVertex = [
         this.getDistanceBetweenPoints(translatedNextVertex, [0, 0]), 0
       ]
-      const radian = this.getRadian([0, 0], translatedNextVertex, transformedNextVertex)
+      const radian = this.getRadian(
+        [0, 0],
+        translatedNextVertex,
+        transformedNextVertex
+      )
       const transformedPoint = this.transformPointByRadian(translatedPoint, radian)
       let distance
       if (this.isBetween(

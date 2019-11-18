@@ -3,7 +3,7 @@
 const utils = require('./index')
 const demo = utils.getPointByPointRadianDistance(
   [1, 1],
-  0,
+  Math.PI * .25,
   1
 )
 console.log(demo)
