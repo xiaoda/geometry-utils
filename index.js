@@ -189,7 +189,18 @@ const GeometryUtils = {
     return verticalDirection
   },
   mergeVectors (...vectors) {
-    // todo
+    const finalPoint = [0, 0]
+    vectors.forEach(vector => {
+      const point = this.getPointByPointRadianDistance(
+        [0, 0], vector[0], vector[1]
+      )
+      finalPoint[0] += point[0]
+      finalPoint[1] += point[1]
+    })
+    return [
+      this.getRadian([0, 0], [1, 0], finalPoint),
+      this.getDistanceBetweenPoints([0, 0], finalPoint)
+    ]
   },
   getQuadrant (pointOrDirection) {
     let quadrant
