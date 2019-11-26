@@ -83,7 +83,7 @@ const GeometryUtils = {
     return intervalID
   },
   setIntervalCustom (callback, delay, precision = 0) {
-    const startTimestamp = +new Date()
+    let startTimestamp = +new Date()
     return setInterval(_ => {
       const timestamp = +new Date()
       if (timestamp - startTimestamp >= delay) {
