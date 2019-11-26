@@ -71,6 +71,23 @@ const GeometryUtils = {
       }
     }
   },
+  setTimeout (callback, delay, precision = 0) {
+    const startTimestamp = +new Date()
+    return setTimeout(_ => {
+      const timestamp = +new Date()
+      if (timestamp - startTimestamp >= delay) callback()
+    }, precision)
+  },
+  setInterval (callback, delay, precision = 0) {
+    const startTimestamp = +new Date()
+    return setInterval(_ => {
+      const timestamp = +new Date()
+      if (timestamp - startTimestamp >= delay) {
+        startTimestamp = timestamp
+        callback()
+      }
+    }, precision)
+  },
   chain (data, ...args) {
     args.forEach(arg => {
       if (Array.isArray(arg)) {
