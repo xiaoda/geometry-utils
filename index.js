@@ -71,14 +71,18 @@ const GeometryUtils = {
       }
     }
   },
-  setTimeout (callback, delay, precision = 0) {
+  setTimeoutCustom (callback, delay, precision = 0) {
     const startTimestamp = +new Date()
-    return setTimeout(_ => {
+    const intervalID = setInterval(_ => {
       const timestamp = +new Date()
-      if (timestamp - startTimestamp >= delay) callback()
+      if (timestamp - startTimestamp >= delay) {
+        clearInterval(intervalID)
+        callback()
+      }
     }, precision)
+    return intervalID
   },
-  setInterval (callback, delay, precision = 0) {
+  setIntervalCustom (callback, delay, precision = 0) {
     const startTimestamp = +new Date()
     return setInterval(_ => {
       const timestamp = +new Date()
