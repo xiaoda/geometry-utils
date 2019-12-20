@@ -3,6 +3,12 @@ const GeometryUtils = {
   /**
    * Common
    */
+  clone (object) {
+    return JSON.parse(JSON.stringify(object))
+  },
+  unique (array) {
+    return Array.from(new Set(array))
+  },
   includes (array, item) {
     return array.some(arrayItem => {
       return JSON.stringify(arrayItem) === JSON.stringify(item)
@@ -21,23 +27,17 @@ const GeometryUtils = {
     return !!smallerCount && !!biggerCount &&
            (smallerCount % 2 === 1 || biggerCount % 2 === 1)
   },
-  unique (array) {
-    return Array.from(new Set(array))
+  mix (a, b, ratio) {
+    return a * (1 - ratio) + b * ratio
   },
-  clone (object) {
-    return JSON.parse(JSON.stringify(object))
+  map (a, b, x) {
+    return x / a * b
   },
   clamp (min, max, x) {
     return Math.min(Math.max(x, min), max)
   },
   changeByPercent (current, target, percent) {
     return current + (target - current) * percent
-  },
-  mix (a, b, ratio) {
-    return a * (1 - ratio) + b * ratio
-  },
-  map (a, b, x) {
-    return x / a * b
   },
   formatRadian (radian) {
     while (Math.abs(radian) > Math.PI) {
