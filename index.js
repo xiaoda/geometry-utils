@@ -7,7 +7,9 @@ const GeometryUtils = {
     return JSON.parse(JSON.stringify(object))
   },
   unique (array) {
-    return Array.from(new Set(array))
+    return Array.from(
+      new Set(array.map(arrayItem => JSON.stringify(arrayItem)))
+    ).map(arrayItem => JSON.parse(arrayItem))
   },
   includes (array, item) {
     return array.some(arrayItem => {
