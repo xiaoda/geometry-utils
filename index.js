@@ -39,7 +39,7 @@ const GeometryUtils = {
   },
   includes (array, item) {
     return array.some(arrayItem => {
-      return JSON.stringify(arrayItem) === JSON.stringify(item)
+      return this.isObjectsEqual(arrayItem, item)
     })
   },
   isBetween (limitA, limitB, x) {
