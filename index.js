@@ -6,6 +6,11 @@ const GeometryUtils = {
   clone (object) {
     return JSON.parse(JSON.stringify(object))
   },
+  unique (array) {
+    return Array.from(
+      new Set(array.map(arrayItem => JSON.stringify(arrayItem)))
+    ).map(arrayItem => JSON.parse(arrayItem))
+  },
   /* Only handle simple data types */
   isObjectsEqual (...objects) {
     const target = objects[0]
@@ -32,11 +37,6 @@ const GeometryUtils = {
       return otherObjects.every(object => object === target)
     }
   },
-  unique (array) {
-    return Array.from(
-      new Set(array.map(arrayItem => JSON.stringify(arrayItem)))
-    ).map(arrayItem => JSON.parse(arrayItem))
-  },
   includes (array, item) {
     return array.some(arrayItem => {
       return this.isObjectsEqual(arrayItem, item)
@@ -58,14 +58,14 @@ const GeometryUtils = {
   mix (a, b, ratio) {
     return a * (1 - ratio) + b * ratio
   },
+  changeByPercent (current, target, percent) {
+    return this.mix(current, target, percent)
+  },
   map (a, b, x) {
     return x / a * b
   },
   clamp (min, max, x) {
     return Math.min(Math.max(x, min), max)
-  },
-  changeByPercent (current, target, percent) {
-    return current + (target - current) * percent
   },
   formatRadian (radian) {
     while (Math.abs(radian) > Math.PI) {
