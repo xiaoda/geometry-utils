@@ -1,8 +1,7 @@
 #!/usr/bin/env node
 
 const utils = require('./index')
-const demo = utils.isObjectsEqual(
-  {a: 1, b: 2},
-  {b: 2, a: 1}
+const demo = utils.getDistanceFromPointToLineSegment(
+  [2, 3], [3, 2], [1, 1]
 )
 console.log(demo)

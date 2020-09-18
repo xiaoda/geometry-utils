@@ -482,23 +482,83 @@ const GeometryUtils = {
     )
   },
 
-  getPointDistanceFromLineSegment (vertices, point) {
-    const [thisVertex, nextVertex] = vertices
-    const translatedNextVertex = this.getVector(
-      thisVertex, nextVertex
+  getDistanceFromPointToLineSegment (
+    vertexA, vertexB, point
+  ) {
+    const distanceFromVertexA = this.getDistanceBetweenPoints(
+      point, vertexA
+    )
+    const distanceFromVertexB = this.getDistanceBetweenPoints(
+      point, vertexB
+    )
+    let distance
+    if (vertexA[0] === vertexB[0]) {
+      distance = (
+        this.isBetween(
+          vertexA[1], vertexB[1], point[1]
+        ) ?
+        Math.abs(point[0] - vertexA[0]) :
+        Math.min(
+          distanceFromVertexA,
+          distanceFromVertexB
+        )
+      )
+    } else if (vertexA[1] === vertexB[1]) {
+      distance = (
+        this.isBetween(
+          vertexA[0], vertexB[0], point[0]
+        ) ?
+        Math.abs(point[1] - vertexA[1]) :
+        Math.min(
+          distanceFromVertexA,
+          distanceFromVertexB
+        )
+      )
+    } else {
+      const a = (
+        (vertexA[1] - vertexB[1]) /
+        (vertexA[0] - vertexB[0])
+      )
+      const b = vertexA[1] - a * vertexA[0]
+      const c = -1 / a
+      const d = point[1] - c * point[0]
+      const crossPoint = []
+      crossPoint[0] = (d - b) / (a - c)
+      crossPoint[1] = a * crossPoint[0] + b
+      distance = (
+        this.isBetween(
+          vertexA[0], vertexB[0], crossPoint[0]
+        ) ?
+        this.getDistanceBetweenPoints(
+          point, crossPoint
+        ) :
+        Math.min(
+          distanceFromVertexA,
+          distanceFromVertexB
+        )
+      )
+    }
+    return distance
+  },
+
+  getDistanceFromPointToLineSegmentV1 (
+    vertexA, vertexB, point
+  ) {
+    const translatedVertexB = this.getVector(
+      vertexA, vertexB
     )
     const translatedPoint = this.getVector(
-      thisVertex, point
+      vertexA, point
     )
-    const transformedNextVertex = [
+    const transformedVertexB = [
       this.getDistanceBetweenPoints(
-        translatedNextVertex, [0, 0]
+        translatedVertexB, [0, 0]
       ), 0
     ]
     const radian = this.getRadian(
       [0, 0],
-      translatedNextVertex,
-      transformedNextVertex
+      translatedVertexB,
+      transformedVertexB
     )
     const transformedPoint = this.transformPointByRadian(
       translatedPoint, radian
@@ -506,7 +566,7 @@ const GeometryUtils = {
     let distance
     if (this.isBetween(
       0,
-      transformedNextVertex[0],
+      transformedVertexB[0],
       transformedPoint[0]
     )) {
       distance = Math.abs(transformedPoint[1])
@@ -516,17 +576,17 @@ const GeometryUtils = {
           transformedPoint, [0, 0]
         ),
         this.getDistanceBetweenPoints(
-          transformedPoint, transformedNextVertex
+          transformedPoint, transformedVertexB
         )
       )
     }
     return distance
-  }
+  },
 
   /**
    * Get distance whether a point is in polygon or not
    */
-  getPointDistanceFromPolygon (vertices, point) {
+  getDistanceFromPointToPolygon (vertices, point) {
     const distances = []
     for (let i = 0; i < vertices.length; i++) {
       const thisVertex = vertices[i]
@@ -535,8 +595,8 @@ const GeometryUtils = {
         vertices[0] :
         vertices[i + 1]
       )
-      const distance = this.getPointDistanceFromLineSegment(
-        [thisVertex, nextVertex], point
+      const distance = this.getDistanceFromPointToLineSegment(
+        thisVertex, nextVertex, point
       )
       distances.push(distance)
     }
@@ -556,7 +616,7 @@ const GeometryUtils = {
   /**
    * Get distance whether a point is in circle or not
    */
-  getPointDistanceFromCircle (center, radius, point) {
+  getDistanceFromPointToCircle (center, radius, point) {
     const distance = this.getDistanceBetweenPoints(
       center, point
     )
