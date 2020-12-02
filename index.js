@@ -184,6 +184,13 @@ const GeometryUtils = {
     return data
   },
 
+  repeatedlyCall (fun, times, data, ...args) {
+    for (let i = 0; i < times; i++) {
+      data = fun(data, ...args)
+    }
+    return data
+  },
+
   /**
    * Basic
    */
