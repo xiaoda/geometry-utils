@@ -489,6 +489,32 @@ const GeometryUtils = {
     )
   },
 
+  getDistanceFromPointToLine (
+    vertexA, vertexB, point
+  ) {
+    let distance
+    if (vertexA[0] === vertexB[0]) {
+      distance = Math.abs(point[0] - vertexA[0])
+    } else if (vertexA[1] === vertexB[1]) {
+      distance = Math.abs(point[1] - vertexA[1])
+    } else {
+      const a = (
+        (vertexA[1] - vertexB[1]) /
+        (vertexA[0] - vertexB[0])
+      )
+      const b = vertexA[1] - a * vertexA[0]
+      const c = -1 / a
+      const d = point[1] - c * point[0]
+      const crossPoint = []
+      crossPoint[0] = (d - b) / (a - c)
+      crossPoint[1] = a * crossPoint[0] + b
+      distance = this.getDistanceBetweenPoints(
+        point, crossPoint
+      )
+    }
+    return distance
+  },
+
   getDistanceFromPointToLineSegment (
     vertexA, vertexB, point
   ) {
