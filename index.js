@@ -492,16 +492,24 @@ const GeometryUtils = {
   getCrossPointFromPointToLine (
     vertexA, vertexB, point
   ) {
-    const a = (
-      (vertexA[1] - vertexB[1]) /
-      (vertexA[0] - vertexB[0])
-    )
-    const b = vertexA[1] - a * vertexA[0]
-    const c = -1 / a
-    const d = point[1] - c * point[0]
     const crossPoint = []
-    crossPoint[0] = (d - b) / (a - c)
-    crossPoint[1] = a * crossPoint[0] + b
+    if (vertexA[0] === vertexB[0]) {
+      crossPoint[0] = vertexA[0]
+      crossPoint[1] = point[1]
+    } else if (vertexA[1] === vertexB[1]) {
+      crossPoint[0] = point[0]
+      crossPoint[1] = vertexA[1]
+    } else {
+      const a = (
+        (vertexA[1] - vertexB[1]) /
+        (vertexA[0] - vertexB[0])
+      )
+      const b = vertexA[1] - a * vertexA[0]
+      const c = -1 / a
+      const d = point[1] - c * point[0]
+      crossPoint[0] = (d - b) / (a - c)
+      crossPoint[1] = a * crossPoint[0] + b
+    }
     return crossPoint
   },
 
