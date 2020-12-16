@@ -320,6 +320,28 @@ const GeometryUtils = {
     return verticalDirection
   },
 
+  isSameDirection (directionA, directionB) {
+    return (
+      (
+        directionA[0] / directionB[0] ===
+        directionA[1] / directionB[1]
+      ) &&
+      directionA[0] * directionB[0] >= 0 &&
+      directionA[1] * directionB[1] >= 0
+    )
+  },
+
+  isOppositeDirection (directionA, directionB) {
+    return (
+      (
+        directionA[0] / directionB[0] ===
+        directionA[1] / directionB[1]
+      ) &&
+      directionA[0] * directionB[0] <= 0 &&
+      directionA[1] * directionB[1] <= 0
+    )
+  },
+
   getVector (pointA, pointB) {
     return this.getDirection(pointA, pointB)
   },
