@@ -511,7 +511,7 @@ const GeometryUtils = {
     )
   },
 
-  getCrossPointFromPointToLine (
+  getVerticalCrossPointFromPointToLine (
     vertexA, vertexB, point
   ) {
     const crossPoint = []
