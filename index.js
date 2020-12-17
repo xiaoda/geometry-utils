@@ -544,7 +544,7 @@ const GeometryUtils = {
     } else if (vertexA[1] === vertexB[1]) {
       distance = Math.abs(point[1] - vertexA[1])
     } else {
-      const crossPoint = this.getCrossPointFromPointToLine(
+      const crossPoint = this.getVerticalCrossPointFromPointToLine(
         vertexA, vertexB, point
       )
       distance = this.getDistanceBetweenPoints(
@@ -587,7 +587,7 @@ const GeometryUtils = {
         )
       )
     } else {
-      const crossPoint = this.getCrossPointFromPointToLine(
+      const crossPoint = this.getVerticalCrossPointFromPointToLine(
         vertexA, vertexB, point
       )
       distance = (
