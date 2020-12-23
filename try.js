@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 const utils = require('./index')
-const result = utils.getDistanceFromPointToLine(
-  [1, 0], [1, 1], [2, 2]
+const result = utils.getCrossPointBetweenLines(
+  [[0, 5], [5, 0]], [[0, -5], [5, 0]]
 )
 console.log(result)
