@@ -594,12 +594,20 @@ const GeometryUtils = {
     const crossPointBetweenLines =
       this.getCrossPointBetweenLines(lineSegmentA, lineSegmentB)
     if (crossPointBetweenLines) {
-      const isPointOnLineSegmentA = this.isBetween(
-        lineSegmentA[0][0], lineSegmentA[1][0], crossPointBetweenLines[0]
-      )
-      const isPointOnLineSegmentB = this.isBetween(
-        lineSegmentB[0][0], lineSegmentB[1][0], crossPointBetweenLines[0]
-      )
+      const isPointOnLineSegmentA =
+        this.isBetween(
+          lineSegmentA[0][0], lineSegmentA[1][0], crossPointBetweenLines[0]
+        ) &&
+        this.isBetween(
+          lineSegmentA[0][1], lineSegmentA[1][1], crossPointBetweenLines[1]
+        )
+      const isPointOnLineSegmentB =
+        this.isBetween(
+          lineSegmentB[0][0], lineSegmentB[1][0], crossPointBetweenLines[0]
+        ) &&
+        this.isBetween(
+          lineSegmentB[0][1], lineSegmentB[1][1], crossPointBetweenLines[1]
+        )
       if (
         isPointOnLineSegmentA &&
         isPointOnLineSegmentB
